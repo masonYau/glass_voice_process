@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "glass-voice-process"
+version = "0.1.0"
+description = "智能眼镜录音预处理：分离佩戴者与对话者并平衡音量（v3 / v4 / v5 三种方法）"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.23",
+    "scipy>=1.9",
+    "soundfile>=0.12",
+    "librosa>=0.10",
+    "noisereduce>=3.0",
+    "webrtcvad-wheels>=2.0.11",
+    "scikit-learn>=1.2",
+    "onnxruntime>=1.16",
+]
+
+[project.optional-dependencies]
+# v5（Codex 方法）用 sherpa-onnx 做 pyannote 式说话人分离
+v5 = ["sherpa-onnx>=1.10"]
+# 生成 report.png
+report = ["matplotlib>=3.6"]
+# 可选的 ECAPA 音色嵌入（需要 torch / torchaudio / speechbrain）
+ecapa = ["speechbrain>=1.0", "torch>=2.0", "torchaudio>=2.0"]
+dev = ["pytest>=7", "matplotlib>=3.6", "sherpa-onnx>=1.10"]
+all = ["sherpa-onnx>=1.10", "matplotlib>=3.6"]
+
+[project.scripts]
+glass-voice = "glass_voice_process.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
